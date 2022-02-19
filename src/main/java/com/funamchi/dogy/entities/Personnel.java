@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,13 +54,13 @@ public class Personnel {
 	@Column(name="sexe")
 	private String sexe;
 	
-	@Column(name="image")
-	private String image;
+	@OneToOne
+	private ImageModel image;
 	
 	@Column(name="email")
 	private String email;
 	
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(name="ville")
 	private Ville ville;
 	

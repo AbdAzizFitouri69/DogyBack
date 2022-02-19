@@ -84,6 +84,47 @@ public class PersonnelServiceImplementation implements PersonnelService{
 	public void supprimerPersonnel(Long id) {
 		personnelRepository.deleteById(id);
 	}
+	
+	public List<Personnel> searchDresseur(String pref) {
+		List<Personnel> dress = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.search(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dresseur") {
+				dress.add(personnel);
+			}
+		}
+		return dress;
+	}
+	
+	public List<Personnel> searchDresseurRegion(String pref) {
+		List<Personnel> dress = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.getPersonnelByCity(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dresseur") {
+				dress.add(personnel);
+			}
+		}
+		return dress;
+	}
+	
+	
+	public List<Personnel> searchDogwalker(String pref) {
+		List<Personnel> dws = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.search(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dogwalker") {
+				dws.add(personnel);
+			}
+		}
+		return dws;
+	}
+	
+	public List<Personnel> searchDogwalkerRegion(String pref) {
+		List<Personnel> dws = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.getPersonnelByCity(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dogwalker") {
+				dws.add(personnel);
+			}
+		}
+		return dws;
+	}
 
 	
 

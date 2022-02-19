@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.funamchi.dogy.entities.EmailNoir;
 import com.funamchi.dogy.entities.User;
+import com.funamchi.dogy.repositories.EmailNoirRepository;
 import com.funamchi.dogy.repositories.UserRepository;
 import com.funamchi.dogy.services.UserService;
 
@@ -14,6 +16,9 @@ public class UserServiceImplementation implements UserService{
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	EmailNoirServiceImplementation emailNoirServiceImplementation;
 
 	@Override
 	public List<User> getAllUsers() {
@@ -38,6 +43,14 @@ public class UserServiceImplementation implements UserService{
 	@Override
 	public List<User> searchUser(String input) {
 		return userRepository.searchUser(input);
+	}
+	
+	public void addToBlacklist(User user , String raison) {
+		EmailNoir en = new EmailNoir();
+		en.setEmail(user.getEmail());
+		en.setRaison(raison);
+		this.userRepository.delete(user);
+		this.emailNoirServiceImplementation.addEmailNoir(en);
 	}
 
 }
