@@ -125,6 +125,26 @@ public class PersonnelServiceImplementation implements PersonnelService{
 		}
 		return dws;
 	}
+	
+	public List<Personnel> searchVeterinaire(String pref) {
+		List<Personnel> vets = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.search(pref)) {
+			if(personnel.getClass().getName() == "com.fumanchi.dogy.entities.Veterinaire") {
+				vets.add(personnel);
+			}
+		}
+		return vets;
+	}
+	
+	public List<Personnel> searchVeterinaireRegion(String pref) {
+		List<Personnel> vets = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.getPersonnelByCity(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Veterinaire") {
+				vets.add(personnel);
+			}
+		}
+		return vets;
+	}
 
 	
 

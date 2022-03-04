@@ -2,6 +2,8 @@ package com.funamchi.dogy.controllers;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,11 @@ public class UserController {
 	@GetMapping("/")
 	public List<User> getUsers(){
 		return userServiceImplementation.getAllUsers();
+	}
+	
+	@GetMapping("/getOne/{email}")
+	public User getOneUser(@PathVariable("email")String email) {
+		return this.userServiceImplementation.getOneUser(email);
 	}
 	
 	@PostMapping("/add")

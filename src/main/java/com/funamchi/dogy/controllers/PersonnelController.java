@@ -22,6 +22,7 @@ import com.funamchi.dogy.entities.Personnel;
 import com.funamchi.dogy.entities.Veterinaire;
 import com.funamchi.dogy.entities.Ville;
 import com.funamchi.dogy.repositories.ImageModelRepository;
+import com.funamchi.dogy.repositories.PersonnelRepository;
 import com.funamchi.dogy.services.implementations.PersonnelServiceImplementation;
 
 @RestController
@@ -33,6 +34,9 @@ public class PersonnelController {
 	
 	@Autowired
 	ImageModelRepository imageModelRepository;
+	
+	@Autowired
+	PersonnelRepository personnelRepository;
 	
 	@GetMapping("/")
 	public List<Personnel> getAllPersonnels(){
@@ -140,24 +144,95 @@ public class PersonnelController {
 		return personnelServiceImplementation.searchDresseur(pref);
 	}
 	
+	@GetMapping("/veterinaires/{pref}")
+	public List<Personnel> getSearchVeterinaire(@PathVariable("pref") String pref){
+		return personnelServiceImplementation.searchVeterinaire(pref);
+	}
+	
+	@GetMapping("/veterinaires/region/{pref}")
+	public List<Personnel> getRegionVeterinaire(@PathVariable("pref") String pref){
+		return personnelServiceImplementation.searchVeterinaireRegion(pref);
+	}
+	
 	@GetMapping("/dresseurs/region/{pref}")
 	public List<Personnel> getRegionDresseur(@PathVariable("pref") String pref){
 		return personnelServiceImplementation.searchDresseurRegion(pref);
 	}
 	
 	@PutMapping("/veterinaires/update")
-	public Veterinaire updateVeterinaire(@RequestBody Veterinaire vet) {
+	public Veterinaire updateVeterinaire(
+			@RequestParam("id") Long id ,
+			@RequestParam("nom") String nom ,
+			@RequestParam("prenom") String prenom ,
+			@RequestParam("dateNaissance") String dateNaissance ,
+			@RequestParam("sexe") String sexe ,
+			@RequestParam("email") String email ,
+			@RequestParam("ville") String ville,
+			@RequestParam("description") String description,
+			@RequestParam("horraire") String horaire
+			//@RequestParam("image") MultipartFile file
+			) {
+		Veterinaire vet = (Veterinaire) this.personnelRepository.findById(id).get();
+		vet.setNom(nom);
+		vet.setPrenom(prenom);
+		vet.setDateNaissance(Date.valueOf(dateNaissance));
+		vet.setSexe(sexe);
+		vet.setEmail(email);
+		vet.setVille(Ville.valueOf(ville));
+		vet.setDescription(description);
+		vet.setHorraire(horaire);
 		return (Veterinaire) personnelServiceImplementation.modifierPersonnel(vet);
 	}
 	
 	@PutMapping("/dogwalkers/update")
-	public Dogwalker updateDogwalker(@RequestBody Dogwalker dw) {
+	public Dogwalker updateDogwalker(
+			@RequestParam("id") Long id ,
+			@RequestParam("nom") String nom ,
+			@RequestParam("prenom") String prenom ,
+			@RequestParam("dateNaissance") String dateNaissance ,
+			@RequestParam("sexe") String sexe ,
+			@RequestParam("email") String email ,
+			@RequestParam("ville") String ville,
+			@RequestParam("description") String description
+			//@RequestParam("image") MultipartFile file
+			) throws IOException {
+		Dogwalker dw = (Dogwalker) this.personnelRepository.findById(id).get();
+		dw.setNom(nom);
+		dw.setPrenom(prenom);
+		dw.setDateNaissance(Date.valueOf(dateNaissance));
+		dw.setSexe(sexe);
+		dw.setEmail(email);
+		dw.setVille(Ville.valueOf(ville));
+		dw.setDescription(description);
 		return (Dogwalker) personnelServiceImplementation.modifierPersonnel(dw);
 	}
 	
 	@PutMapping("dressuers/update")
-	public Dresseur updateDresseur(@RequestBody Dresseur dres) {
-		return (Dresseur) personnelServiceImplementation.modifierPersonnel(dres);
+	public Dresseur updateDresseur(
+			@RequestParam("id") Long id ,
+			@RequestParam("nom") String nom ,
+			@RequestParam("prenom") String prenom ,
+			@RequestParam("dateNaissance") String dateNaissance ,
+			@RequestParam("sexe") String sexe ,
+			@RequestParam("email") String email ,
+			@RequestParam("ville") String ville,
+			@RequestParam("description") String description
+			//@RequestParam("image") MultipartFile file
+			) throws IOException {
+		
+		Dresseur drs = (Dresseur) this.personnelRepository.findById(id).get();
+		drs.setNom(nom);
+		drs.setPrenom(prenom);
+		drs.setDateNaissance(Date.valueOf(dateNaissance));
+		drs.setSexe(sexe);
+		drs.setEmail(email);
+		drs.setVille(Ville.valueOf(ville));
+		drs.setDescription(description);
+//		ImageModel imageModel = new ImageModel();
+//		imageModel.setContent(file.getBytes());
+//		ImageModel savedImageModel = this.imageModelRepository.save(imageModel);
+//		drs.setImage(savedImageModel);
+		return (Dresseur) personnelServiceImplementation.modifierPersonnel(drs);
 	}
 
 }
