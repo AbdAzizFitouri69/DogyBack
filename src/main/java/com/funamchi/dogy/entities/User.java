@@ -50,6 +50,12 @@ public class User {
 	@Column(name="image")
 	private String image;
 	
+	@Column(name="verifCode")
+	private int verifCode;
+	
+	@Column(name="enabled")
+	private boolean enabled;
+	
 	@Column(name="role")
 	private String role;
 	
@@ -61,15 +67,19 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 	private Set<Annonce> annonces;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 	private Set<Article> articles;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 	private Set<Commentaire> commentaires;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 	private Set<Message> messages;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
 	private Set<Rating> ratings;
 	

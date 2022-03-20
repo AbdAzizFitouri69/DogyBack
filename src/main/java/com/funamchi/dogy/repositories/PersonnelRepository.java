@@ -20,5 +20,8 @@ public interface PersonnelRepository extends CrudRepository<Personnel, Long>{
 	
 	@Query(value = "SELECT * FROM Personnel p WHERE p.nom LIKE %:pref% OR p.prenom LIKE %:pref%" , nativeQuery = true)
 	public List<Personnel> search(@Param("pref")String pref);
+	
+	@Query(value = "SELECT * FROM Personnel p WHERE (p.nom LIKE %:pref% OR p.prenom LIKE %:pref%) AND p.type_personnel = 'Veterinaire'" , nativeQuery = true)
+	public List<Personnel> lookForVeterinaire(@Param("pref")String pref);
 
 }

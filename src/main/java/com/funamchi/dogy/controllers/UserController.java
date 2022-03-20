@@ -1,7 +1,9 @@
 package com.funamchi.dogy.controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,16 @@ public class UserController {
 	@PostMapping("/toBlackList/{reason}")
 	public void addToBlacklist(@RequestBody User user, @PathVariable("reason") String reason) {
 		this.userServiceImplementation.addToBlacklist(user, reason);
+	}
+	
+	@PostMapping("/sendVerifCode/{idUser}")
+	public void sendVerifCode(@PathVariable("idUser")long idUser) throws UnsupportedEncodingException, MessagingException {
+		this.userServiceImplementation.sendVerifMail(idUser);
+	}
+	
+	@GetMapping("checkVerifCode/{idUser}/{verifCode}")
+	public boolean checkVerifCode(@PathVariable("idUser")long idUser, @PathVariable("verifCode")int verifCode) {
+		return this.userServiceImplementation.verifVerifCode(idUser, verifCode);
 	}
 	
 	

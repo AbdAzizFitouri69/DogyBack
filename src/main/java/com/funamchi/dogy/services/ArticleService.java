@@ -21,7 +21,7 @@ public interface ArticleService {
 
 	List<Article> getPendingArticles();
 	
-	Article addCommentaireToArticle(Long idArticle, Commentaire comment);
+	Article addCommentaireToArticle(Long idArticle,Long idUser, Commentaire comment);
 	
 	List<Commentaire> getCommentsOfArticle(Long id);
 

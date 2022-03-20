@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.funamchi.dogy.entities.Article;
 import com.funamchi.dogy.entities.Commentaire;
+import com.funamchi.dogy.entities.User;
 import com.funamchi.dogy.repositories.ArticleRepository;
+import com.funamchi.dogy.repositories.CommentaireRepository;
 import com.funamchi.dogy.repositories.UserRepository;
 import com.funamchi.dogy.services.ArticleService;
 
@@ -22,6 +24,9 @@ public class ArticleServiceImplemetation implements ArticleService{
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	CommentaireRepository commentaireRepository;
 	
 	@Autowired
 	CommentaireServiceImplementation commentaireServiceImplementation;
@@ -72,11 +77,19 @@ public class ArticleServiceImplemetation implements ArticleService{
 	public List<Article> getPendingArticles() {
 		return articleRepository.getPending();
 	}
+	
+	public List<Article> getUserArticles(Long idUser){
+		return articleRepository.getUserArticles(idUser);
+	}
 
 	@Override
-	public Article addCommentaireToArticle(Long idArticle, Commentaire comment) {
+	public Article addCommentaireToArticle(Long idArticle, Long idUser, Commentaire comment) {
 		Article article = articleRepository.findById(idArticle).get();
-		article.getCommentaires().add(comment);
+		User user = this.userRepository.findById(idUser).get();
+		comment.setDateAjout(new Date(Calendar.getInstance().getTime().getTime()));
+		comment.setUser(user);
+		comment.setArticle(article);
+		article.getCommentaires().add(this.commentaireRepository.save(comment));
 		return articleRepository.save(article);
 	}
 

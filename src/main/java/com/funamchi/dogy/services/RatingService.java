@@ -4,6 +4,6 @@ import com.funamchi.dogy.entities.Rating;
 
 public interface RatingService {
 	
-	Rating addRating(Rating rating, Long idUser, Long idPersonnel);
+	//Rating addRatingFiable(Long idUser, Long idPersonnel);
 
 }

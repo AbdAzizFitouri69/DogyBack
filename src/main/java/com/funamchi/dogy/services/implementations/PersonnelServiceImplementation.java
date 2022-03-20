@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.funamchi.dogy.entities.Dogwalker;
 import com.funamchi.dogy.entities.Dresseur;
 import com.funamchi.dogy.entities.Personnel;
+import com.funamchi.dogy.entities.Rating;
 import com.funamchi.dogy.entities.Veterinaire;
 import com.funamchi.dogy.repositories.PersonnelRepository;
+import com.funamchi.dogy.repositories.RatingRepository;
 import com.funamchi.dogy.services.PersonnelService;
 
 @Service
@@ -18,6 +20,9 @@ public class PersonnelServiceImplementation implements PersonnelService{
 	
 	@Autowired
 	PersonnelRepository personnelRepository;
+	
+	@Autowired
+	RatingRepository ratingRepository;
 
 	@Override
 	public List<Personnel> getAllPersonels() {
@@ -127,13 +132,14 @@ public class PersonnelServiceImplementation implements PersonnelService{
 	}
 	
 	public List<Personnel> searchVeterinaire(String pref) {
-		List<Personnel> vets = new ArrayList<>();
-		for(Personnel personnel : personnelRepository.search(pref)) {
-			if(personnel.getClass().getName() == "com.fumanchi.dogy.entities.Veterinaire") {
-				vets.add(personnel);
-			}
-		}
-		return vets;
+		return personnelRepository.lookForVeterinaire(pref);
+//		List<Personnel> vets = new ArrayList<>();
+//		for(Personnel personnel : personnelRepository.search(pref)) {
+//			if(personnel.getClass().getName() == "com.fumanchi.dogy.entities.Veterinaire") {
+//				vets.add(personnel);
+//			}
+//		}
+//		return vets;
 	}
 	
 	public List<Personnel> searchVeterinaireRegion(String pref) {
@@ -144,6 +150,36 @@ public class PersonnelServiceImplementation implements PersonnelService{
 			}
 		}
 		return vets;
+	}
+	
+	public List<Rating> getDogWalkerFiableRating(Long idDogwalker){
+		Dogwalker dw =  (Dogwalker) personnelRepository.findById(idDogwalker).get();
+		List<Rating> ratings = new ArrayList<Rating>();
+		for (Rating rating : dw.getRatings()) {
+			if(rating.isFiable()) {
+				ratings.add(rating);
+			}
+		}
+		return ratings;
+	}
+	
+	public int getNumberFiableDogwalker(Long idDogwalker) {
+		return ratingRepository.getFiableNumber(idDogwalker);
+	}
+	
+	public List<Rating> getDogWalkerNonFiableRating(Long idDogwalker){
+		Dogwalker dw =  (Dogwalker) personnelRepository.findById(idDogwalker).get();
+		List<Rating> ratings = new ArrayList<Rating>();
+		for (Rating rating : dw.getRatings()) {
+			if(rating.isNon_fiable()) {
+				ratings.add(rating);
+			}
+		}
+		return ratings;
+	}
+	
+	public List<Rating> getUserRatingForDogwalker(Long idUser, Long idDogwalker){
+		return ratingRepository.getUserRatingToDogWalker(idUser, idDogwalker);
 	}
 
 	

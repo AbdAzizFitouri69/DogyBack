@@ -1,6 +1,7 @@
 package com.funamchi.dogy.entities;
 
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,8 +51,14 @@ public class Annonce {
 	@Column(name="race")
 	private String race;
 	
+	@OneToOne
+	private ImageModel image;
+	
+	//@OneToMany
+	//private Set<ImageModel> images;
+	
 	@Column(name="age")
-	private int age;
+	private String age;
 	
 	@Column(name="status")
 	private String status;

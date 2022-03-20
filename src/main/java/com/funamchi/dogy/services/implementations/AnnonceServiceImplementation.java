@@ -14,6 +14,7 @@ import com.funamchi.dogy.entities.AnnonceFound;
 import com.funamchi.dogy.entities.AnnonceLost;
 import com.funamchi.dogy.entities.AnnonceVente;
 import com.funamchi.dogy.entities.User;
+import com.funamchi.dogy.entities.Ville;
 import com.funamchi.dogy.repositories.AnnonceRepository;
 import com.funamchi.dogy.repositories.UserRepository;
 import com.funamchi.dogy.services.AnnonceService;
@@ -69,15 +70,70 @@ public class AnnonceServiceImplementation implements AnnonceService{
 		annonce.setStatus("REFUSED");
 		return annonceRepository.save(annonce);
 	}
+	
+	public Annonce resolveAnnonce(Long id) {
+		Annonce annonce = annonceRepository.findById(id).get();
+		annonce.setStatus("RESOLU");
+		return annonceRepository.save(annonce);
+	}
+	
+	public List<Annonce> getUserAnnonce(Long id){
+		return annonceRepository.getUserAnnonces(id);
+	}
 
 	@Override
 	public List<Annonce> getAcceptedAnnonces() {
 		return annonceRepository.getAccepted();
 	}
+	
+	public List<Annonce> getAcceptedAnnoncesCity(String city){
+		int villeNum = Ville.valueOf(city).ordinal();
+		return annonceRepository.AnnoncesFromVille(villeNum);
+	}
 
 	@Override
 	public List<Annonce> getPendingAnnonces() {
 		return annonceRepository.getPending();
+	}
+	
+	public List<Annonce> getResolvedAnnonces(){
+		return annonceRepository.getResolvedAnnonces();
+	}
+	
+	public List<AnnonceVente> getAcceptedVente(){
+		return annonceRepository.getAcceptedVente();
+	}
+	
+	public List<AnnonceAccouplement> getAcceptedAccouplement(){
+		return annonceRepository.getAcceptedAccouplement();
+	}
+	
+	public List<AnnonceFound> getAcceptedFound(){
+		return annonceRepository.getAcceptedFound();
+	}
+	
+	public List<AnnonceLost> getAcceptedLost(){
+		return annonceRepository.getAcceptedLost();
+	}
+	
+	public List<AnnonceVente> getCurrentCityVente(String city){
+		int villeNum = Ville.valueOf(city).ordinal();
+		return annonceRepository.filterCityVente(villeNum);
+	}
+	
+	public List<AnnonceAccouplement> getCurrentCityAccouplement(String city){
+		int villeNum = Ville.valueOf(city).ordinal();
+		return annonceRepository.filterCityAccouplement(villeNum);
+	}
+	
+	public List<AnnonceLost> getCurrentCityLost(String city){
+		int villeNum = Ville.valueOf(city).ordinal();
+		return annonceRepository.filterCityLost(villeNum);
+	}
+	
+	public List<AnnonceFound> getCurrentCityFound(String city){
+		int villeNum = Ville.valueOf(city).ordinal();
+		return annonceRepository.filterCityFound(villeNum);
 	}
 
 	

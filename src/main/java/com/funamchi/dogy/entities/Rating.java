@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +33,17 @@ public class Rating {
 	@Column(name="ratingValue")
 	private float ratingValue;
 	
+	@Column(name="fiable")
+	private boolean fiable;
+	
+	@Column(name="non_fiable")
+	private boolean non_fiable;
+	
+	@JsonIgnore
 	@ManyToOne
 	private User user;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Dogwalker dogwalker;
 	

@@ -24,5 +24,8 @@ public class AnnonceFound extends Annonce{
 	
 	@Column(name="papiers")
 	private boolean papiers;
+	
+	@Column(name="details")
+	private String details;
 
 }

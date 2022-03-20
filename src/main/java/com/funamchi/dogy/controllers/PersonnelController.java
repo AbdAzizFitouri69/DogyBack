@@ -19,11 +19,13 @@ import com.funamchi.dogy.entities.Dogwalker;
 import com.funamchi.dogy.entities.Dresseur;
 import com.funamchi.dogy.entities.ImageModel;
 import com.funamchi.dogy.entities.Personnel;
+import com.funamchi.dogy.entities.Rating;
 import com.funamchi.dogy.entities.Veterinaire;
 import com.funamchi.dogy.entities.Ville;
 import com.funamchi.dogy.repositories.ImageModelRepository;
 import com.funamchi.dogy.repositories.PersonnelRepository;
 import com.funamchi.dogy.services.implementations.PersonnelServiceImplementation;
+import com.funamchi.dogy.services.implementations.RatingServiceImplementation;
 
 @RestController
 @RequestMapping("/personnels")
@@ -233,6 +235,39 @@ public class PersonnelController {
 //		ImageModel savedImageModel = this.imageModelRepository.save(imageModel);
 //		drs.setImage(savedImageModel);
 		return (Dresseur) personnelServiceImplementation.modifierPersonnel(drs);
+	}
+	
+	@GetMapping("/dogwalkers/ratings/fiable/{idDogwalker}")
+	public List<Rating> getDogWalkerFiableRating(@PathVariable("idDogwalker") Long idDogwalker){
+		return personnelServiceImplementation.getDogWalkerFiableRating(idDogwalker);
+	}
+	
+	@GetMapping("/dogwalkers/ratings/non_fiable/{idDogwalker}")
+	public List<Rating> getDogWalkerNonFiableRating(@PathVariable("idDogwalker") Long idDogwalker){
+		return personnelServiceImplementation.getDogWalkerNonFiableRating(idDogwalker);
+	}
+	
+	@GetMapping("/dogwalkers/ratings/{idDogwalker}/{idUser}")
+	public List<Rating> getDogWalkerUserRating(@PathVariable("idDogwalker") Long idDogwalker, @PathVariable("idUser")Long idUser){
+		return personnelServiceImplementation.getUserRatingForDogwalker(idUser, idDogwalker);
+	}
+	
+	@Autowired
+	RatingServiceImplementation ratingServiceImplementation;
+	
+	@PostMapping("/dogwalkers/ratings/add_fiable/{idDogwalker}/{idUser}")
+	public Personnel addFiable(@PathVariable("idDogwalker")Long idDogwalker, @PathVariable("idUser")Long idUser){
+		return ratingServiceImplementation.addRatingFiable(idUser, idDogwalker);
+	}
+	
+	@PostMapping("/dogwalkers/ratings/add_non_fiable/{idDogwalker}/{idUser}")
+	public Personnel addNonFiable(@PathVariable("idDogwalker")Long idDogwalker, @PathVariable("idUser")Long idUser){
+		return ratingServiceImplementation.addRatingNonFiable(idUser, idDogwalker);
+	}
+	
+	@GetMapping("/dogwalkers/ratings/get_num_fiable/{idDogwalker}")
+	public int getNumFiable(@PathVariable("idDogwalker")Long idDogwalker) {
+		return personnelServiceImplementation.getNumberFiableDogwalker(idDogwalker);
 	}
 
 }

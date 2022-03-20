@@ -24,13 +24,43 @@ public class RatingServiceImplementation implements RatingService{
 	@Autowired
 	UserRepository userRepository;
 
-	@Override
-	public Rating addRating(Rating rating, Long idUser, Long idPersonnel) {
+	
+	public Personnel addRatingFiable(Long idUser, Long idPersonnel) {
 		User user = userRepository.findById(idUser).get();
 		Dogwalker dw = (Dogwalker)  personnelRepository.findById(idPersonnel).get();
-		rating.setDogwalker(dw);
+		for (Rating rt : dw.getRatings()) {
+			if(rt.getUser().getIdUser() == idUser) {
+				dw.getRatings().remove(rt);
+				ratingRepository.deleteById(rt.getIdRating());
+				break;
+			}
+		}
+		Rating rating = new Rating();
 		rating.setUser(user);
-		return ratingRepository.save(rating);
+		rating.setDogwalker(dw);
+		rating.setFiable(true);
+		rating.setNon_fiable(false);
+		dw.getRatings().add(this.ratingRepository.save(rating));
+		return personnelRepository.save(dw);
+	}
+	
+	public Personnel addRatingNonFiable(Long idUser, Long idPersonnel) {
+		User user = userRepository.findById(idUser).get();
+		Dogwalker dw = (Dogwalker)  personnelRepository.findById(idPersonnel).get();
+		for (Rating rt : dw.getRatings()) {
+			if(rt.getUser().getIdUser() == idUser) {
+				dw.getRatings().remove(rt);
+				ratingRepository.deleteById(rt.getIdRating());
+				break;
+			}
+		}
+		Rating rating = new Rating();
+		rating.setUser(user);
+		rating.setDogwalker(dw);
+		rating.setFiable(false);
+		rating.setNon_fiable(true);
+		dw.getRatings().add(this.ratingRepository.save(rating));
+		return personnelRepository.save(dw);
 	}
 	
 

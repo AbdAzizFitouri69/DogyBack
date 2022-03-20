@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,8 +40,8 @@ public class Article {
 	@Column(name="contenu")
 	private String contenu;
 	
-	@Column(name="image")
-	private String image;
+	@OneToOne
+	private ImageModel image;
 	
 	@Column(name="dateAjout")
 	private Date dateAjout;

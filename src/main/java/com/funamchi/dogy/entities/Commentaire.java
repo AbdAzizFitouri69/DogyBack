@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +39,7 @@ public class Commentaire {
 	private Date dateAjout;
 	
 	@ManyToOne
+	@JsonIgnore
 	private Article article;
 	
 	@ManyToOne
