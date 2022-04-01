@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.funamchi.dogy.entities.Dogsitter;
 import com.funamchi.dogy.entities.Dogwalker;
 import com.funamchi.dogy.entities.Dresseur;
 import com.funamchi.dogy.entities.ImageModel;
@@ -53,6 +54,11 @@ public class PersonnelController {
 	@GetMapping("/dogwalkers")
 	public List<Personnel> getAllDogWalkers(){
 		return this.personnelServiceImplementation.getAllDogwalkers();
+	}
+	
+	@GetMapping("/dogsitters")
+	public List<Personnel> getAllDogsitters(){
+		return this.personnelServiceImplementation.getAllDogsitters();
 	}
 	
 	@GetMapping("/dresseurs")
@@ -108,14 +114,48 @@ public class PersonnelController {
 		return personnelServiceImplementation.addPersonnel(dw);
 	}
 	
+	@PostMapping("/dogsitters/add")
+	public Personnel addDogsitter(
+			@RequestParam("nom") String nom ,
+			@RequestParam("prenom") String prenom ,
+			@RequestParam("dateNaissance") String dateNaissance ,
+			@RequestParam("sexe") String sexe ,
+			@RequestParam("email") String email ,
+			@RequestParam("ville") String ville,
+			@RequestParam("image") MultipartFile file) throws IOException {
+		Dogsitter dw = new Dogsitter();
+		dw.setNom(nom);
+		dw.setPrenom(prenom);
+		//vet.setDateNaissance(Date.valueOf(dateNaissance));
+		dw.setSexe(sexe);
+		dw.setEmail(email);
+		dw.setVille(Ville.valueOf(ville));
+		ImageModel imageModel = new ImageModel();
+		imageModel.setContent(file.getBytes());
+		ImageModel savedImageModel = this.imageModelRepository.save(imageModel);
+		dw.setImage(savedImageModel);
+		return personnelServiceImplementation.addPersonnel(dw);
+	}
+	
 	@GetMapping("/dogwalkers/{pref}")
 	public List<Personnel> getSearchedDogwalkers(@PathVariable("pref") String pref){
 		return personnelServiceImplementation.searchDogwalker(pref);
 	}
 	
+	@GetMapping("/dogsitters/{pref}")
+	public List<Personnel> getSearchedDogsitters(@PathVariable("pref") String pref){
+		return personnelServiceImplementation.searchDogsitter(pref);
+	}
+	
+	
 	@GetMapping("/dogwalkers/region/{pref}")
 	public List<Personnel> getRegionDogwalker(@PathVariable("pref") String pref){
 		return personnelServiceImplementation.searchDogwalkerRegion(pref);
+	}
+	
+	@GetMapping("/dogsitters/region/{pref}")
+	public List<Personnel> getRegionDogsitter(@PathVariable("pref") String pref){
+		return personnelServiceImplementation.searchDogsitterRegion(pref);
 	}
 	
 	@PostMapping("/dresseurs/add")
@@ -209,6 +249,29 @@ public class PersonnelController {
 		return (Dogwalker) personnelServiceImplementation.modifierPersonnel(dw);
 	}
 	
+	@PutMapping("/dogsitters/update")
+	public Dogsitter updateDogsitter(
+			@RequestParam("id") Long id ,
+			@RequestParam("nom") String nom ,
+			@RequestParam("prenom") String prenom ,
+			@RequestParam("dateNaissance") String dateNaissance ,
+			@RequestParam("sexe") String sexe ,
+			@RequestParam("email") String email ,
+			@RequestParam("ville") String ville,
+			@RequestParam("description") String description
+			//@RequestParam("image") MultipartFile file
+			) throws IOException {
+		Dogsitter dw = (Dogsitter) this.personnelRepository.findById(id).get();
+		dw.setNom(nom);
+		dw.setPrenom(prenom);
+		dw.setDateNaissance(Date.valueOf(dateNaissance));
+		dw.setSexe(sexe);
+		dw.setEmail(email);
+		dw.setVille(Ville.valueOf(ville));
+		dw.setDescription(description);
+		return (Dogsitter) personnelServiceImplementation.modifierPersonnel(dw);
+	}
+	
 	@PutMapping("dressuers/update")
 	public Dresseur updateDresseur(
 			@RequestParam("id") Long id ,
@@ -242,14 +305,29 @@ public class PersonnelController {
 		return personnelServiceImplementation.getDogWalkerFiableRating(idDogwalker);
 	}
 	
+	@GetMapping("/dogsitters/ratings/fiable/{idDogsitter}")
+	public List<Rating> getDogsitterFiableRating(@PathVariable("idDogsitter") Long idDogsitter){
+		return personnelServiceImplementation.getDogsitterFiableRating(idDogsitter);
+	}
+	
 	@GetMapping("/dogwalkers/ratings/non_fiable/{idDogwalker}")
 	public List<Rating> getDogWalkerNonFiableRating(@PathVariable("idDogwalker") Long idDogwalker){
 		return personnelServiceImplementation.getDogWalkerNonFiableRating(idDogwalker);
 	}
 	
+	@GetMapping("/dogsitters/ratings/non_fiable/{idDogsitter}")
+	public List<Rating> getDogsitterNonFiableRating(@PathVariable("idDogsitter") Long idDogsitter){
+		return personnelServiceImplementation.getDogsitterNonFiableRating(idDogsitter);
+	}
+	
 	@GetMapping("/dogwalkers/ratings/{idDogwalker}/{idUser}")
 	public List<Rating> getDogWalkerUserRating(@PathVariable("idDogwalker") Long idDogwalker, @PathVariable("idUser")Long idUser){
 		return personnelServiceImplementation.getUserRatingForDogwalker(idUser, idDogwalker);
+	}
+	
+	@GetMapping("/dogsitters/ratings/{idDogsitter}/{idUser}")
+	public List<Rating> getDogsitterUserRating(@PathVariable("idDogsitter") Long idDogsitter, @PathVariable("idUser")Long idUser){
+		return personnelServiceImplementation.getUserRatingForDogsitter(idUser, idDogsitter);
 	}
 	
 	@Autowired
@@ -260,14 +338,29 @@ public class PersonnelController {
 		return ratingServiceImplementation.addRatingFiable(idUser, idDogwalker);
 	}
 	
+	@PostMapping("/dogsitters/ratings/add_fiable/{idDogwalker}/{idUser}")
+	public Personnel addFiableDogsitter(@PathVariable("idDogwalker")Long idDogwalker, @PathVariable("idUser")Long idUser){
+		return ratingServiceImplementation.addRatingFiableDogsitter(idUser, idDogwalker);
+	}
+	
 	@PostMapping("/dogwalkers/ratings/add_non_fiable/{idDogwalker}/{idUser}")
 	public Personnel addNonFiable(@PathVariable("idDogwalker")Long idDogwalker, @PathVariable("idUser")Long idUser){
 		return ratingServiceImplementation.addRatingNonFiable(idUser, idDogwalker);
 	}
 	
+	@PostMapping("/dogsitters/ratings/add_non_fiable/{idDogwalker}/{idUser}")
+	public Personnel addNonFiableDogsitter(@PathVariable("idDogwalker")Long idDogwalker, @PathVariable("idUser")Long idUser){
+		return ratingServiceImplementation.addRatingNonFiableDogsitter(idUser, idDogwalker);
+	}
+	
 	@GetMapping("/dogwalkers/ratings/get_num_fiable/{idDogwalker}")
 	public int getNumFiable(@PathVariable("idDogwalker")Long idDogwalker) {
 		return personnelServiceImplementation.getNumberFiableDogwalker(idDogwalker);
+	}
+	
+	@GetMapping("/dogsitters/ratings/get_num_fiable/{idDogsitter}")
+	public int getNumFiableDogsitter(@PathVariable("idDogsitter")Long idDogsitter) {
+		return personnelServiceImplementation.getNumberFiableDogsitter(idDogsitter);
 	}
 
 }

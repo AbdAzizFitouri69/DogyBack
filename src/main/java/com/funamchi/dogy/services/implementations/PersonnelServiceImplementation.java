@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.funamchi.dogy.entities.Dogsitter;
 import com.funamchi.dogy.entities.Dogwalker;
 import com.funamchi.dogy.entities.Dresseur;
 import com.funamchi.dogy.entities.Personnel;
@@ -49,6 +50,16 @@ public class PersonnelServiceImplementation implements PersonnelService{
 			}
 		}
 		return dws;
+	}
+	
+	public List<Personnel> getAllDogsitters(){
+		List<Personnel> ds = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.findAll()) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dogsitter") {
+				ds.add(personnel);
+			}
+		}
+		return ds;
 	}
 
 	@Override
@@ -131,6 +142,26 @@ public class PersonnelServiceImplementation implements PersonnelService{
 		return dws;
 	}
 	
+	public List<Personnel> searchDogsitter(String pref) {
+		List<Personnel> dws = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.search(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dogsitter") {
+				dws.add(personnel);
+			}
+		}
+		return dws;
+	}
+	
+	public List<Personnel> searchDogsitterRegion(String pref) {
+		List<Personnel> dws = new ArrayList<>();
+		for(Personnel personnel : personnelRepository.getPersonnelByCity(pref)) {
+			if(personnel.getClass().getName() == "com.funamchi.dogy.entities.Dogsitter") {
+				dws.add(personnel);
+			}
+		}
+		return dws;
+	}
+	
 	public List<Personnel> searchVeterinaire(String pref) {
 		return personnelRepository.lookForVeterinaire(pref);
 //		List<Personnel> vets = new ArrayList<>();
@@ -163,8 +194,23 @@ public class PersonnelServiceImplementation implements PersonnelService{
 		return ratings;
 	}
 	
+	public List<Rating> getDogsitterFiableRating(Long idDogsitter){
+		Dogsitter dw =  (Dogsitter) personnelRepository.findById(idDogsitter).get();
+		List<Rating> ratings = new ArrayList<Rating>();
+		for (Rating rating : dw.getRatings()) {
+			if(rating.isFiable()) {
+				ratings.add(rating);
+			}
+		}
+		return ratings;
+	}
+	
 	public int getNumberFiableDogwalker(Long idDogwalker) {
 		return ratingRepository.getFiableNumber(idDogwalker);
+	}
+	
+	public int getNumberFiableDogsitter(Long idDogsitter) {
+		return ratingRepository.getFiableNumberDogsitter(idDogsitter);
 	}
 	
 	public List<Rating> getDogWalkerNonFiableRating(Long idDogwalker){
@@ -178,8 +224,23 @@ public class PersonnelServiceImplementation implements PersonnelService{
 		return ratings;
 	}
 	
+	public List<Rating> getDogsitterNonFiableRating(Long idDogsitter){
+		Dogsitter dw =  (Dogsitter) personnelRepository.findById(idDogsitter).get();
+		List<Rating> ratings = new ArrayList<Rating>();
+		for (Rating rating : dw.getRatings()) {
+			if(rating.isNon_fiable()) {
+				ratings.add(rating);
+			}
+		}
+		return ratings;
+	}
+	
 	public List<Rating> getUserRatingForDogwalker(Long idUser, Long idDogwalker){
 		return ratingRepository.getUserRatingToDogWalker(idUser, idDogwalker);
+	}
+	
+	public List<Rating> getUserRatingForDogsitter(Long idUser, Long idDogsitter){
+		return ratingRepository.getUserRatingToDogsitter(idUser, idDogsitter);
 	}
 
 	

@@ -196,7 +196,7 @@ public class AnnonceController {
 	public Annonce addFound(@RequestParam("titre") String titre, @RequestParam("race") String race,
 			@RequestParam("age") String age, @RequestParam("sexe") String sexe, @RequestParam("taille") String taille,
 			@RequestParam("ville") String ville, @RequestParam("details") String details,
-			@RequestParam("images") MultipartFile file, @PathVariable("idUser") Long idUser) throws IOException {
+			@RequestParam("image") MultipartFile file, @PathVariable("idUser") Long idUser) throws IOException {
 		AnnonceFound found = new AnnonceFound();
 		found.setTitre(titre);
 		found.setTaille(TailleChien.valueOf(taille));

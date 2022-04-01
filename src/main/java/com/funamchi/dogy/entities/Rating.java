@@ -47,4 +47,8 @@ public class Rating {
 	@ManyToOne
 	private Dogwalker dogwalker;
 	
+	@JsonIgnore
+	@ManyToOne
+	private Dogsitter dogsitter;
+	
 }

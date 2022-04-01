@@ -12,19 +12,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @Entity
-@DiscriminatorValue("Dogwalker")
+@DiscriminatorValue("Dogsitter")
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
-public class Dogwalker extends Personnel{
+public class Dogsitter extends Personnel{
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="dogwalker")
-	private Set<Rating> ratings ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "dogsitter")
+	private Set<Rating> ratings;
 	
-	public Dogwalker() {
+	public Dogsitter() {
 		super();
 	}
-	
+
 }

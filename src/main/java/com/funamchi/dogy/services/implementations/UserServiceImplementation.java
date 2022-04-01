@@ -53,7 +53,7 @@ public class UserServiceImplementation implements UserService{
 		User user = userRepository.findById(idUser).get();
 		String toAddress = user.getEmail();
 		String fromAddress = "dogy.platform@gmail.com";
-		String senderName = "DOGY";
+		String senderName = "CALBY";
 		String subject = "Code de Vérification";
 		String content = "Cher "+user.getPrenom()+",<br>"
 				+ "Voila votre code de vérification : "+user.getVerifCode()+"<br>"
